@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% load static %}{% block section %}
+<!-- ======= Team Section ======= -->
+<section id="team" class="team section-bg">
+  <div class="container" data-aos="fade-up">
+    <div class="section-title">
+      <h2>Our Team</h2>
+      <p>
+        To a prospect seeking out a new service provider, it can all be a little
+        overwhelming. It's easy to wonder: Who are the real people behind all
+        the smoke and mirrors?
+      </p>
+    </div>
+
+    <div class="row">
+      {% for n in detail %}
+      <div class="col-lg-6">
+        <div
+          class="member d-flex align-items-start"
+          data-aos="zoom-in"
+          data-aos-delay="100"
+        >
+          <div class="pic">
+            <img src="{% static n.3 %}" class="img-fluid" alt="" />
+          </div>
+          <div class="member-info">
+            <h4>{{n.0}}</h4>
+            <span>{{n.1}}</span>
+            <p>{{n.2}}</p>
+            <div class="social">
+              <a href=""><i class="ri-twitter-fill"></i></a>
+              <a href=""><i class="ri-facebook-fill"></i></a>
+              <a href=""><i class="ri-instagram-fill"></i></a>
+              <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- End Team Section -->
+{% endblock %}

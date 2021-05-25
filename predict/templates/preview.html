@@ -1,0 +1,88 @@
+{% extends 'base.html' %} {% load static %}{% block content %}
+<!-- ======= Cta Section ======= -->
+<section id="cta" class="cta" style="width: 100%">
+  <div class="container" data-aos="zoom-in">
+    <div class="row justify-content-center">
+      <div>
+        <h3 class="text-center">Video Preview.</h3>
+      </div>
+      <div class="cta-btn-container text-center justify-content-center mb-3">
+        <img
+          style="max-width: 100%"
+          src="{% static 's2.jpg' %}"
+          id="imgClickAndChange"
+        />
+      </div>
+      <button
+        class="cta-btn align-middle text-center text-primary"
+        style="
+          padding: 15px 15px;
+          text-align: center;
+          display: inline-block;
+          width: 35%;
+        "
+        id="myClickButton"
+        onclick="startOrStop()"
+      >
+        Start Prediction
+      </button>
+      <button
+        class="cta-btn text-center text-primary"
+        style="text-align: center; display: inline-block; width: 30%"
+        onclick="textToAudio()"
+      >
+        <i class="fa fa-volume-up"></i>
+      </button>
+      <div id="myOutput" class="text-center text-light"></div>
+    </div>
+  </div>
+</section>
+<!-- End Cta Section -->
+{% endblock %} {% block footer %}
+<script>
+  var flag = false;
+  var imgFlag = false;
+  var interval;
+  var start = function () {
+    $("#myClickButton").html("Stop Prediction");
+  };
+  var stop = function () {
+    $("#myClickButton").html("Start Prediction");
+    $("#myOutput").html("");
+  };
+
+  $(document).ready(function () {
+    $("#myClickButton").click(function () {
+      $(this).val("Stop Prediction");
+    });
+  });
+
+  function startOrStop() {
+    flag = flag ? false : true;
+    flag
+      ? (document.getElementById("imgClickAndChange").src =
+          "{% url 'preview' %}")
+      : (document.getElementById("imgClickAndChange").src =
+          "{% static 's2.jpg' %}");
+    flag ? $("#myClickButton").click(start) : $("#myClickButton").click(stop);
+    interval = flag ? setInterval(refresh, 1000) : clearInterval(interval);
+  }
+
+  function refresh() {
+    $.get(
+      "/predict/",
+      function (data) {
+        $("#myOutput").html(data);
+      },
+      "html"
+    );
+  }
+
+  function textToAudio() {
+    let gesture = document.getElementById("myOutput").textContent;
+    let speech = new SpeechSynthesisUtterance(gesture);
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+  }
+</script>
+{% endblock %}
